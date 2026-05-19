@@ -1,0 +1,145 @@
+# Travel Guide
+
+A Claude Code skill that produces customized, source-verified travel itineraries. Never guesses about a destination — always searches, cross-verifies, and labels confidence.
+
+> 中文版请见 [README.md](README.md)
+
+## Why This Skill Exists
+
+Asking Claude "plan a trip to X for me" will get you an answer — but it **hallucinates**. Made-up restaurants, outdated prices, attractions that closed years ago. LLM knowledge has a cutoff date, and travel information (prices, hours, seasonal conditions) changes fast.
+
+This skill forces Claude to do what it wouldn't do on its own:
+
+- **Confirm requirements first, then act** — No assumptions. Output a confirmation card before any research. You nod, then it searches.
+- **Five-dimension parallel search** — Transport, dining, attractions, accommodation, and local pitfalls — searched simultaneously, not recalled from memory. Every data point carries a confidence label (✅⚠️⚡❓) so you know exactly where the information came from.
+- **Geographic route optimization** — Won't have you drive past an attraction on Day 1 and then backtrack 200 km to visit it on Day 3. Itineraries flow in one continuous spatial path.
+- **Transparent budget** — Flights, hotels, tickets, meals — every line item listed and compared against your budget.
+- **Pitfall warnings + backup plans + ticket alerts** — Common scams, rain alternatives, and "book Mogao Caves 30 days in advance" reminders that a plain prompt would never systematically surface.
+
+In short: **A plain prompt = a friend who read about travel but whose memory stopped 6 months ago. This skill = a travel planner who asks what you need, searches the web to verify everything, and delivers an actually executable plan.**
+
+## User Flow
+
+The skill follows a strict three-phase flow. No phase may be skipped.
+
+**Phase 1: Confirm** — You say "I want to go to X." The skill parses your input, identifies missing information (dates? budget? group size? nature or culture?), and outputs a confirmation card. It does not search until you explicitly approve.
+
+**Phase 2: Research** — Once confirmed, five parallel web searches launch: how to get there, what to eat, what's worth seeing, where to stay safely, and what scams to avoid. All findings are cross-verified and confidence-labeled.
+
+**Phase 3: Report** — A complete itinerary tailored to your preferences (pace, budget, kids/elders) with daily time blocks, budget breakdown, pitfall checklist, backup plans, and practical tips.
+
+## Repository Structure
+
+```
+travel-guide/
+├── SKILL.md                              # Skill definition & behavior rules
+├── README.md                             # 中文版
+├── README_EN.md                          # English version (this file)
+├── knowledge/                            # Five-dimension search frameworks
+│   ├── transport.md                      #   Transport search templates
+│   ├── dining.md                         #   Dining search & verification rules
+│   ├── attractions.md                    #   Attraction search & commercialization filter
+│   ├── accommodation.md                  #   Accommodation search & safety rules
+│   └── local-insights.md                 #   Scams, weather, festivals & taboos
+├── references/
+│   └── cross-verification-rules.md       # Confidence labeling & source hierarchy
+├── templates/
+│   └── itinerary-output-template.md      # Phase 3 output template
+└── Examples/
+    └── 青甘大环线9天旅行计划.md           # Example: 9-day Qinghai-Gansu loop itinerary
+```
+
+## Example Output
+
+Below is a preview from the example itinerary [`Examples/青甘大环线9天旅行计划.md`](Examples/青甘大环线9天旅行计划.md) — a 9-day, 8-night Qinghai-Gansu grand loop for a couple departing from Hangzhou.
+
+### 📋 Requirement Confirmation
+
+The skill first outputs a confirmation card to align on every detail:
+
+| Item | Detail |
+|------|--------|
+| Destination | Qinghai-Gansu Grand Loop (Qinghai → Gansu) |
+| Dates | May 23–31, 2026 (8 nights, 9 days) |
+| Budget | ¥5,000–8,000/person (incl. round-trip flights) |
+| Travelers | Couple (2 people) |
+| Preferences | Nature + culture, relaxed-normal pace |
+
+### 🗺️ Daily Time & Route Planning
+
+The itinerary is **geographically optimized** — a clockwise loop with zero backtracking. Each day is broken into morning/noon/afternoon/evening blocks, with duration, transport method, cost, and confidence label for every activity:
+
+```
+Day 1: Hangzhou ✈ Xining → Hotel rest & acclimatization → Mojia Street Night Market
+Day 2: Xining → Ta'er Monastery → Qinghai Lake (Heimahe) → Chaka Town
+Day 3: Chaka Salt Lake (morning) → Delingha → Dachaidan Emerald Lake → Dachaidan Town
+Day 4: Dachaidan → Dangjin Pass → Aksay → Dunhuang
+Day 5: Full day in Dunhuang (Mogao Caves → siesta → Singing Sand Dunes → Shazhou Night Market)
+Day 6: Dunhuang → Jiayuguan Fort → Zhangye
+Day 7: Rainbow Danxia (morning) → Biandukou → Qilian Zhuo'er Mountain
+Day 8: Qilian Grassland → Menyuan → Dabanshan → Xining
+Day 9: Xining ✈ Hangzhou
+```
+
+Day 5 (Dunhuang) in detail — every activity has a specific time slot and cost:
+
+| Time | Activity | Detail | Cost |
+|------|----------|--------|------|
+| Morning | Mogao Caves | A-ticket ¥238, 8 caves + digital film, ~3h | ¥238/person |
+| Noon | Hotel siesta | Rest during midday heat (30°C+) | ¥30–50 |
+| Afternoon | Singing Sand Dunes & Crescent Lake | Enter after 5 PM when sand cools down, camel ride ¥100 | ¥110 |
+| Evening | Starlight concert | Free open-air concert, ~9 PM | ¥0 |
+
+### 💰 Two Budget Options
+
+Instead of a vague "it'll cost about X", the skill provides **two concrete plans** with every line item:
+
+| Category | Plan A: Group Carpool | Plan B: Private Car |
+|----------|----------------------|---------------------|
+| Round-trip flights | ¥1,500–1,800 | ¥1,500–1,800 |
+| Transport (7 days) | ¥2,200–2,800 | ¥3,500–4,200 |
+| Accommodation (8 nights) | ¥1,000–1,200 | ¥1,000–1,200 |
+| Tickets & experiences | ¥750–850 | ¥750–850 |
+| Dining | ¥700–900 | ¥700–900 |
+| **Total per person** | **¥6,450–7,550** ✅ | **¥7,750–9,250** ⚠️ |
+
+### ⚠️ Pitfall Warnings
+
+Systematic search for common scams and traps, each one sourced:
+
+- **Low-price tour trap** — Packages under ¥4,000/person for 7–8 day tours: over 60% involve forced shopping or hidden fees (source: Qinghai tourism complaints data 2025)
+- **"Free photo" scam** — Staff offer free photos at scenic spots, then demand ¥50–100 for prints
+- **Chaka Salt Lake barefoot in water** — The brine is corrosive; shoe covers are mandatory
+
+### 🔔 Critical Ticket Alerts
+
+- 🔴 **Mogao Caves A-tickets must be booked 30 days in advance on WeChat mini-program!** Only 6,000 tickets per day. This is the single most likely thing to derail the trip — the skill calls it out repeatedly.
+
+### 🔄 Backup Plans
+
+Things change. The skill covers what to do:
+
+- **Rain?** Salt lakes won't photograph well → deep-dive Ta'er Monastery instead; Danxia actually looks best right after rain
+- **No Mogao A-tickets?** Emergency tickets ¥100/4 caves, or watch the *Encore Dunhuang* immersive show ¥298
+- **Altitude sickness?** Shorten the Qinghai segment, descend to Dunhuang (elevation only 1,139m); glucose drinks help more than rhodiola
+
+### 📱 Practical Info
+
+- Emergency numbers, Qinghai/Gansu tourism complaint hotlines
+- Layered clothing guide (base layer → hoodie → windbreaker)
+- SPF 50+ sunscreen, sunglasses, lip balm
+- Download Qinghai + Gansu offline maps ahead of time (large stretches have no cell signal)
+
+---
+
+**A plain prompt gives you an itinerary that looks good on paper. This skill gives you a battle-tested plan: requirements confirmed, facts searched and verified, confidence labeled, budget itemized, pitfalls flagged, and backups prepared.**
+
+## Installation & Usage
+
+1. Install this skill into your Claude Code skills directory
+2. Trigger it by asking for travel planning, itinerary help, trip recommendations, or destination guides
+3. The skill will guide you through requirement confirmation before starting research
+
+## Generated By
+
+This skill was generated using [domain-distiller](https://github.com/UWhisper/domain-distiller) — a tool that distills domain knowledge into structured, decision-ready Claude Code skills. Domain-distiller transforms scattered expertise (blogs, guides, checklists, personal experience) into a disciplined skill format with mandatory phases, verification rules, and output templates.

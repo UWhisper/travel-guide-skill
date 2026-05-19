@@ -1,5 +1,7 @@
 # Travel Guide（旅行规划助手）
 
+> For English version, see [README_EN.md](README_EN.md)
+
 一个基于搜索验证、而非凭记忆编造的 Claude Code 旅行规划技能。绝不瞎猜目的地信息 —— 始终先搜索、再交叉验证、最后标注可信度。
 
 ## 为什么需要这个技能？
