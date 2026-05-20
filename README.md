@@ -4,6 +4,15 @@
 
 一个基于搜索验证、而非凭记忆编造的 Claude Code 旅行规划技能。绝不瞎猜目的地信息 —— 始终先搜索、再交叉验证、最后标注可信度。
 
+## 📍 浏览导航
+
+- [为什么需要这个技能？](#为什么需要这个技能)
+- [用户使用流程](#用户使用流程)
+- [仓库结构](#仓库结构)
+- [安装使用](#安装使用)
+- [输出案例展示](#输出案例展示)
+- [生成方式](#生成方式)
+
 ## 为什么需要这个技能？
 
 直接问 Claude"帮我规划一个XX旅行"也能得到回答，但它会**编造信息**——虚构不存在的餐厅、过时的票价、甚至已经关门的景点。大模型的知识有截止日期，而旅行信息（价格、开放时间、季节景观）变化极快。
@@ -135,9 +144,57 @@ travel-guide/
 
 ## 安装使用
 
-1. 将此技能安装到你的 Claude Code 技能目录中
-2. 通过询问旅行规划、行程推荐、目的地攻略来触发
-3. 技能会自动引导你完成需求确认，然后开始搜索和规划
+### 前置条件
+
+- 已安装 [Claude Code](https://docs.anthropic.com/en/docs/claude-code)（需要 Anthropic API Key 或 Claude Pro 订阅）
+- 已配置好 WebSearch 能力（Claude Code 默认开启）
+
+### 安装步骤
+
+**方法一：克隆仓库（推荐）**
+
+```bash
+# 进入 Claude Code 的用户技能目录
+cd ~/.claude/skills/
+
+# 克隆本仓库
+git clone git@github.com:UWhisper/travel-guide-skill.git travel-guide
+```
+
+**方法二：手动下载**
+
+1. 从 [Releases](https://github.com/UWhisper/travel-guide-skill) 下载最新版本的 zip 包
+2. 解压到 `~/.claude/skills/travel-guide/` 目录下
+
+**方法三：通过 domain-distiller 安装**
+
+如果你已经安装了 [domain-distiller](https://github.com/UWhisper/domain-distiller)，可以直接用它安装：
+
+```bash
+# domain-distiller 会自动将 skill 安装到正确位置
+# 详见 domain-distiller 的使用说明
+```
+
+### 验证安装
+
+安装完成后，在终端中启动 Claude Code，输入：
+
+```
+帮我规划一个周末旅行
+```
+
+如果技能正确安装，Claude 会自动响应需求确认卡（包含目的地、日期、预算等项目），而不是直接给你一段攻略文字。看到确认卡即表示安装成功。
+
+### 触发关键词
+
+以下任意说法都会触发此技能：
+
+- "帮我规划XX旅行" / "做一个XX攻略"
+- "我想去XX玩几天" / "推荐XX的行程"
+- "XX有什么好玩的" / "XX怎么玩"
+- "给我一个XX的旅行计划"
+
+技能会自动引导你完成需求确认 → 全网搜索 → 输出方案的完整流程。
 
 ## 生成方式
 
