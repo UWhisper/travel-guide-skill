@@ -150,29 +150,22 @@ Things change. The skill covers what to do:
 
 ### Installation
 
-**Option 1: Clone the repository (recommended)**
+**Option 1: One-liner (recommended)**
 
 ```bash
-# Navigate to Claude Code's user skills directory
-cd ~/.claude/skills/
+npx skills add UWhisper/travel-guide-skill
+```
 
-# Clone this repo
+**Option 2: Clone the repository**
+
+```bash
 git clone git@github.com:UWhisper/travel-guide-skill.git travel-guide
 ```
 
-**Option 2: Manual download**
+**Option 3: Manual download**
 
 1. Download the latest zip from [Releases](https://github.com/UWhisper/travel-guide-skill)
 2. Extract to `~/.claude/skills/travel-guide/`
-
-**Option 3: Via domain-distiller**
-
-If you already have [domain-distiller](https://github.com/UWhisper/domain-distiller) installed, it can install this skill automatically:
-
-```bash
-# domain-distiller handles the installation path for you
-# See domain-distiller docs for details
-```
 
 ### Verify Installation
 
