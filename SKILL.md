@@ -83,14 +83,35 @@ For each dimension, use the search query templates from the corresponding `knowl
 
 Before searching each dimension: Read the corresponding knowledge file to get the exact search query templates.
 
-**Step 2.3: Cross-verify findings**
+**Step 2.3: Geographic Feasibility Verification (地理可行性验证) — MANDATORY**
+
+For EVERY recommended POI (attraction, restaurant, accommodation), you MUST verify the actual distance and transit time from the user's CONFIRMED starting point. Never assume proximity based on administrative boundaries.
+
+**The Rule:** Same district/city ≠ close. Cities and districts can span 15+ km. A POI "in 滨江区" does not mean it's near the user's specific location within that district.
+
+**Process:**
+1. Map the user's confirmed origin to the POI using a distance/traffic-aware query: `"{origin} 到 {poi} 距离 打车 多久"`
+2. Record: distance (km), transit method, transit time at the expected time of day
+3. Apply the feasibility threshold:
+   | Trip Type | Max One-Way Transit | Rule |
+   |-----------|--------------------|------|
+   | Evening-only (2-4h total) | 25 min | Each transit minute eats into limited time |
+   | Half-day | 45 min | Longer trips OK, balance with experience time |
+   | Full-day | 60 min | One long transit per day max |
+   | Multi-day based at destination | 60 min | Daily commuting should be reasonable |
+
+4. **Reject or flag** POIs that exceed the threshold: "❌ [POI] excluded: 35min one-way from origin exceeds the 25min evening limit"
+
+**This step comes BEFORE cross-verification.** A POI that's unreachable is useless regardless of how well-verified its other details are.
+
+**Step 2.4: Cross-verify findings**
 For each data point, apply verification rules from `references/cross-verification-rules.md`:
 - Attraction prices/hours: minimum 2 matching sources
 - Restaurant recommendations: Dianping ≥3.5 rating OR Xiaohongshu ≥3 independent mentions
 - Transport schedules: official sources (12306/airline websites) first
 - Label EVERY data point: ✅ (3+ sources/official) / ⚠️ (2 sources) / ⚡ (1 source) / ❓ (inferred)
 
-**Step 2.4: Output Research Brief**
+**Step 2.5: Output Research Brief**
 
 Before the full report, show a 5-section summary:
 
@@ -159,7 +180,10 @@ You MUST optimize the itinerary order based on geographic relationships. Do NOT 
    - ❌ Day 1 passes attraction X on the highway, but itinerary visits X on Day 2 (wasted backtracking)
    - ❌ Day 1 morning at destination center, afternoon 30km west, evening back at center, Day 2 morning 30km west again
    - ❌ Two attractions 5 minutes apart are placed on different days
+   - ❌ POI recommended because "it's in the same district/city" without verifying actual distance from origin (same district ≠ close — cities and districts can span 15+ km)
+   - ❌ POI distance estimated from district center rather than the user's specific starting point
    - ✅ Route flows like a one-way path with minimal overlap
+   - ✅ Every POI's distance verified from user's actual origin, not inferred from district name
 
 **Step 3.3: Output full itinerary**
 Use the template structure from `templates/itinerary-output-template.md`. The report MUST contain all 6 modules:
