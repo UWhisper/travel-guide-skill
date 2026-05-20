@@ -151,24 +151,23 @@ travel-guide/
 
 ### 安装步骤
 
-**方法一：克隆仓库（推荐）**
+**方法一：一行命令安装（推荐）**
 
 ```bash
-# 进入 Claude Code 的用户技能目录
-cd ~/.claude/skills/
+npx skills add UWhisper/travel-guide-skill
+```
 
+**方法二：克隆仓库**
+
+```bash
 # 克隆本仓库
 git clone git@github.com:UWhisper/travel-guide-skill.git travel-guide
 ```
 
-**方法二：手动下载**
+**方法三：手动下载**
 
 1. 从 [Releases](https://github.com/UWhisper/travel-guide-skill) 下载最新版本的 zip 包
 2. 解压到 `~/.claude/skills/travel-guide/` 目录下
-
-**方法三：通过 domain-distiller 安装**
-
-如果你已经安装了 [domain-distiller](https://github.com/UWhisper/domain-distiller)，可以直接用它安装：
 
 ```bash
 # domain-distiller 会自动将 skill 安装到正确位置
